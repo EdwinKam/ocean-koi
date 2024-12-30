@@ -5,6 +5,7 @@ export interface WhaleBaseRequest {
 export interface CreatePostRequest extends WhaleBaseRequest {
   content: string;
   subject: string;
+  imageUri: string;
 }
 
 export interface GetRecommendationPostRequest extends WhaleBaseRequest {

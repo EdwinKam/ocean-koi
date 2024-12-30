@@ -2,6 +2,7 @@ import Icon from "@/assets/icons";
 import { theme } from "@/constants/theme";
 import auth from "@react-native-firebase/auth";
 import { Router } from "expo-router";
+import React from "react";
 import { Alert, Pressable, StyleSheet } from "react-native";
 
 type SignOutButtonProps = {

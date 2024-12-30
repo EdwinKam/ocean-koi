@@ -13,19 +13,30 @@ export const createPost = async (request: CreatePostRequest) => {
   console.log(
     "calling " + `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/post/create`
   );
+  const formData = new FormData();
+
+  // Append text data
+  formData.append("postContent", request.content);
+  formData.append("postSubject", request.subject);
+  // Convert the image URI to a Blob and append to FormData
+  if (request.imageUri) {
+    formData.append("image", {
+      uri: request.imageUri,
+      name: `photo.jpg`, // You can use a dynamic name or the original file name
+      type: "image/jpeg", // Ensure the correct MIME type
+    } as any);
+  }
+
+  console.log(formData);
+
   const response = await fetch(
     `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/post/create`,
     {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        Accept: "*/*", // Match the accept header from the curl command
         accessToken: request.accessToken,
       },
-      body: JSON.stringify({
-        postContent: request.content,
-        postSubject: request.subject,
-      }), // Ensure the body matches the expected JSON structure
+      body: formData, // Use formData instead of JSON.stringify
     }
   );
 
@@ -231,6 +242,8 @@ export async function readPost(
     ...data.post,
     author: author,
   };
+
+  console.log(post);
 
   return post;
 }

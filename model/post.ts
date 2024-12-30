@@ -7,4 +7,5 @@ export interface Post {
   content: string;
   author: User;
   creationTs: number;
+  imageUrls: string[];
 }

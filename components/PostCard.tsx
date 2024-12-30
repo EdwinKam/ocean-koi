@@ -66,15 +66,17 @@ const ImagePostCard: React.FC<PostCardProps> = ({ post, showCreationDate }) => {
     : "null";
   return (
     <View style={styles.contentContainer}>
-      <View style={styles.imagePlaceholder}>
-        <Image
-          source={{
-            uri: "https://64.media.tumblr.com/b4f649d5fd4e5e8c2ae3bd66a5783016/18ce8e60dacba0b7-c5/s1280x1920/18278335098dbe59b5d5db9f8af65fb7789efbb0.jpg",
-          }}
-          style={styles.image} // Apply the style here
-          resizeMode="cover" // Ensure the image covers the area without stretching
-        />
-      </View>
+      {post.imageUrls?.[0] && (
+        <View style={styles.imagePlaceholder}>
+          <Image
+            source={{
+              uri: post.imageUrls?.[0] || "",
+            }}
+            style={styles.image} // Apply the style here
+            resizeMode="cover" // Ensure the image covers the area without stretching
+          />
+        </View>
+      )}
       <Text style={[styles.textPadding, styles.postSubject]}>
         {post.content}
       </Text>

@@ -22,10 +22,11 @@ const ViewImagePostPage: React.FC<ViewImagePostPageProps> = ({ post }) => {
       <Text style={styles.authorName}>
         {post?.author.username || "Author Name"}
       </Text>
-      <Image
-        source={{ uri: post?.imageUrl || "https://via.placeholder.com/300" }}
-        style={styles.image}
-      />
+      {post?.imageUrls?.length > 0 && (
+        <Image source={{ uri: post.imageUrls[0] }} style={styles.image} />
+      )}
+      <Text style={styles.authorName}>{post?.subject}</Text>
+      <Text style={styles.authorName}>{post?.content}</Text>
       <PostCommentView post={post} />
     </View>
   );
