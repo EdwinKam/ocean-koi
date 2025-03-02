@@ -34,7 +34,7 @@ const SignIn = () => {
 
       await auth().signInWithEmailAndPassword(
         emailRef.current,
-        passwordRef.current
+        passwordRef.current,
       );
       const isTokenValid = await isAccessTokenValid(await auth().currentUser!);
       if (!isTokenValid) {

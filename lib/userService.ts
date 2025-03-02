@@ -12,17 +12,20 @@ function updateUserCache(users: User[]) {
 }
 
 export async function getBatchUser(
-  request: GetBatchUserPublicDataRequest
+  request: GetBatchUserPublicDataRequest,
 ): Promise<Record<string, User>> {
   // Filter out userIds that are already in the cache
   const uncachedUserIds = request.userIds.filter((id) => !userCache[id]);
 
   // If all users are cached, return them directly as a record
   if (uncachedUserIds.length === 0) {
-    return request.userIds.reduce((acc, id) => {
-      acc[id] = userCache[id];
-      return acc;
-    }, {} as Record<string, User>);
+    return request.userIds.reduce(
+      (acc, id) => {
+        acc[id] = userCache[id];
+        return acc;
+      },
+      {} as Record<string, User>,
+    );
   }
 
   // Construct the query string with uncached userIds
@@ -45,7 +48,7 @@ export async function getBatchUser(
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(
-      `HTTP error! status: ${response.status}, details: ${errorText}`
+      `HTTP error! status: ${response.status}, details: ${errorText}`,
     );
   }
 
@@ -56,8 +59,11 @@ export async function getBatchUser(
   updateUserCache(fetchedUsers);
 
   // Return all requested users, combining cached and newly fetched as a record
-  return request.userIds.reduce((acc, id) => {
-    acc[id] = userCache[id];
-    return acc;
-  }, {} as Record<string, User>);
+  return request.userIds.reduce(
+    (acc, id) => {
+      acc[id] = userCache[id];
+      return acc;
+    },
+    {} as Record<string, User>,
+  );
 }

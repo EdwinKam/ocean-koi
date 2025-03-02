@@ -1,7 +1,7 @@
-import Icon from '@/assets/icons';
-import { theme } from '@/constants/theme';
-import { Router } from 'expo-router';
-import { Pressable, StyleSheet } from 'react-native';
+import Icon from "@/assets/icons";
+import { theme } from "@/constants/theme";
+import { Router } from "expo-router";
+import { Pressable, StyleSheet } from "react-native";
 
 type BackButtonProps = {
   size?: number;
@@ -17,7 +17,7 @@ const BackButton: React.FC<BackButtonProps> = ({ size = 26, router }) => {
       style={styles.button}
     >
       <Icon
-        name='arrowLeft'
+        name="arrowLeft"
         strokeWidth={2.5}
         size={size}
         color={theme.light.text}
@@ -30,9 +30,9 @@ export default BackButton;
 
 const styles = StyleSheet.create({
   button: {
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     padding: 5,
     borderRadius: theme.radius.sm,
-    backgroundColor: 'rgba(0,0,0,0.07)',
+    backgroundColor: "rgba(0,0,0,0.07)",
   },
 });

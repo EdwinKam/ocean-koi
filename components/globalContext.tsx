@@ -14,7 +14,7 @@ export const useAfterAuthContext = () => {
   const context = useContext(GlobalContext);
   if (!context) {
     throw new Error(
-      "useAfterAuthContext must be used within a ContextAfterAuth"
+      "useAfterAuthContext must be used within a ContextAfterAuth",
     );
   }
   return context;

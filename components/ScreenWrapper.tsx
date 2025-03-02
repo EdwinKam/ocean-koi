@@ -1,6 +1,6 @@
-import { theme } from '@/constants/theme';
-import { Appearance, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { theme } from "@/constants/theme";
+import { Appearance, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const ScreenWrapper = ({ children }: { children: React.ReactNode }) => {
   const edgeInsects = useSafeAreaInsets();
@@ -10,7 +10,7 @@ const ScreenWrapper = ({ children }: { children: React.ReactNode }) => {
   const colorScheme = Appearance.getColorScheme();
 
   let backgroundColor = theme.light.background;
-  if (colorScheme === 'dark') {
+  if (colorScheme === "dark") {
     backgroundColor = theme.dark.background;
   }
 
