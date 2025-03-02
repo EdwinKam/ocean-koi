@@ -11,10 +11,10 @@ import { getBatchUser } from "./userService";
 
 export const createPost = async (request: CreatePostRequest) => {
   console.log(
-    "calling " + `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/post/create`,
+    "calling " + `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/posts`,
   );
   const response = await fetch(
-    `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/post/create`,
+    `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/posts`,
     {
       method: "POST",
       headers: {
@@ -88,7 +88,7 @@ export async function getBatchPost(request: GetBatchPostRequest) {
   const queryParams = request.postIds
     .map((id) => `postIds=${encodeURIComponent(id)}`)
     .join("&");
-  const url = `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/post/getBatchPost?${queryParams}`;
+  const url = `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/posts/batch?${queryParams}`;
 
   console.log("calling " + url);
 
@@ -130,11 +130,12 @@ export async function getBatchPost(request: GetBatchPostRequest) {
       author: userMap[post.authorId],
     }));
 
+  console.log(posts);
   return posts;
 }
 
 export async function getOwnPosts(accessToken: string): Promise<Post[]> {
-  const url = `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/post/getOwnPosts`;
+  const url = `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/posts/me`;
 
   console.log("calling " + url);
 
@@ -188,7 +189,7 @@ export async function readPost(
   accessToken: string,
   postId: string,
 ): Promise<Post> {
-  const url = `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/post/readPost?postId=${postId}`;
+  const url = `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/posts/${postId}`;
 
   console.log("calling " + url);
 
@@ -245,7 +246,7 @@ export async function getPostComments(
   accessToken: string,
   post: Post,
 ): Promise<PostComment[]> {
-  const url = `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/post/getComments?postId=${post.id}`;
+  const url = `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/posts/${post.id}/comments`;
   console.log("calling " + url);
   const response = await fetch(url, {
     method: "GET",
@@ -314,7 +315,7 @@ export async function getPostComments(
 }
 
 export const addComment = async (request: AddCommentRequest) => {
-  const url = `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/post/addComment`;
+  const url = `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/posts/${request.postId}/comments`;
   console.log("calling " + url);
   const response = await fetch(url, {
     method: "POST",
@@ -336,4 +337,42 @@ export const addComment = async (request: AddCommentRequest) => {
 
   const data = await response.json();
   return data;
+};
+
+export const likePost = async (accessToken: string, postId: string) => {
+  const url = `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/posts/${postId}/likes`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "*/*",
+      accessToken: accessToken,
+    },
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `HTTP error! status: ${response.status}, details: ${errorText}`,
+    );
+  }
+};
+
+export const unlikePost = async (accessToken: string, postId: string) => {
+  const url = `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/posts/${postId}/likes`;
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "*/*",
+      accessToken: accessToken,
+    },
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `HTTP error! status: ${response.status}, details: ${errorText}`,
+    );
+  }
 };
