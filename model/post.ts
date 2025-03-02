@@ -8,4 +8,5 @@ export interface Post {
   author: User;
   creationTs: number;
   likes: number;
+  likedByCurrentUser: boolean;
 }
