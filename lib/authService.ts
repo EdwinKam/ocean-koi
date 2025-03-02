@@ -41,7 +41,7 @@ export const isAccessTokenValid = async (user: FirebaseAuthTypes.User) => {
 export const verifyToken = async (firebaseToken: string) => {
   try {
     console.log(
-      "calling " + `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/auth/verify`
+      "calling " + `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/auth/verify`,
     );
     console.log("access token is " + firebaseToken);
     const response = await fetch(
@@ -52,7 +52,7 @@ export const verifyToken = async (firebaseToken: string) => {
           "Content-Type": "application/json",
           accessToken: firebaseToken,
         },
-      }
+      },
     );
 
     if (!response.ok) {

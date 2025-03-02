@@ -1,6 +1,6 @@
-import { theme } from '@/constants/theme';
-import { hp } from '@/lib/common';
-import { StyleSheet, TextInput, View, ViewStyle } from 'react-native';
+import { theme } from "@/constants/theme";
+import { hp } from "@/lib/common";
+import { StyleSheet, TextInput, View, ViewStyle } from "react-native";
 
 interface InputProps {
   icon?: React.ReactNode;
@@ -34,14 +34,14 @@ export default Input;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
+    flexDirection: "row",
     height: hp(7.2),
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     borderWidth: 0.4,
     borderColor: theme.light.text,
     borderRadius: theme.radius.xxl,
-    borderCurve: 'continuous',
+    borderCurve: "continuous",
     paddingHorizontal: 18,
     gap: 12,
   },

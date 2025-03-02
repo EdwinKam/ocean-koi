@@ -1,4 +1,6 @@
 import { Post } from "@/model/post";
+import { PostComment } from "@/model/postComment";
+import User from "@/model/user";
 import {
   AddCommentRequest,
   CreatePostRequest,
@@ -6,12 +8,10 @@ import {
   GetRecommendationPostRequest,
 } from "@/model/whaleRequests";
 import { getBatchUser } from "./userService";
-import User from "@/model/user";
-import { PostComment } from "@/model/postComment";
 
 export const createPost = async (request: CreatePostRequest) => {
   console.log(
-    "calling " + `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/post/create`
+    "calling " + `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/post/create`,
   );
   const response = await fetch(
     `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/post/create`,
@@ -26,14 +26,14 @@ export const createPost = async (request: CreatePostRequest) => {
         postContent: request.content,
         postSubject: request.subject,
       }), // Ensure the body matches the expected JSON structure
-    }
+    },
   );
 
   if (!response.ok) {
     // If the response status is not OK, throw an error
     const errorText = await response.text();
     throw new Error(
-      `HTTP error! status: ${response.status}, details: ${errorText}`
+      `HTTP error! status: ${response.status}, details: ${errorText}`,
     );
   }
 
@@ -42,11 +42,11 @@ export const createPost = async (request: CreatePostRequest) => {
 };
 
 export async function getRecommendationPostIdsForUser(
-  request: GetRecommendationPostRequest
+  request: GetRecommendationPostRequest,
 ): Promise<string[]> {
   console.log(
     "calling " +
-      `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/recommendation/get`
+      `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/recommendation/get`,
   );
   const response = await fetch(
     `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/recommendation/get`,
@@ -57,14 +57,14 @@ export async function getRecommendationPostIdsForUser(
         Accept: "*/*", // Match the accept header from the curl command
         accessToken: request.accessToken,
       },
-    }
+    },
   );
 
   if (!response.ok) {
     // If the response status is not OK, throw an error
     const errorText = await response.text();
     throw new Error(
-      `HTTP error! status: ${response.status}, details: ${errorText}`
+      `HTTP error! status: ${response.status}, details: ${errorText}`,
     );
   }
 
@@ -105,14 +105,14 @@ export async function getBatchPost(request: GetBatchPostRequest) {
     // If the response status is not OK, throw an error
     const errorText = await response.text();
     throw new Error(
-      `HTTP error! status: ${response.status}, details: ${errorText}`
+      `HTTP error! status: ${response.status}, details: ${errorText}`,
     );
   }
 
   const data = await response.json();
   console.log(data.posts);
   const authorIds: string[] = Array.from(
-    new Set(data.posts.map((post) => post.authorId))
+    new Set(data.posts.map((post: { authorId: any }) => post.authorId)),
   ); // get deduped authorId
 
   const userMap: Record<string, User> = await getBatchUser({
@@ -121,8 +121,11 @@ export async function getBatchPost(request: GetBatchPostRequest) {
   });
 
   const posts: Post[] = data.posts
-    .filter((post) => userMap[post.authorId] !== undefined) // Filter out posts with undefined authors
-    .map((post) => ({
+    .filter(
+      (post: { authorId: string | number }) =>
+        userMap[post.authorId] !== undefined,
+    ) // Filter out posts with undefined authors
+    .map((post: { authorId: string | number }) => ({
       ...post,
       author: userMap[post.authorId],
     }));
@@ -148,7 +151,7 @@ export async function getOwnPosts(accessToken: string): Promise<Post[]> {
     // If the response status is not OK, throw an error
     const errorText = await response.text();
     throw new Error(
-      `HTTP error! status: ${response.status}, details: ${errorText}`
+      `HTTP error! status: ${response.status}, details: ${errorText}`,
     );
   }
 
@@ -160,7 +163,7 @@ export async function getOwnPosts(accessToken: string): Promise<Post[]> {
   }
 
   const authorIds: string[] = Array.from(
-    new Set(data.posts.map((post) => post.authorId))
+    new Set(data.posts.map((post: { authorId: any }) => post.authorId)),
   ); // get deduped authorId
 
   const userMap: Record<string, User> = await getBatchUser({
@@ -169,8 +172,11 @@ export async function getOwnPosts(accessToken: string): Promise<Post[]> {
   });
 
   const posts: Post[] = data.posts
-    .filter((post) => userMap[post.authorId] !== undefined) // Filter out posts with undefined authors
-    .map((post) => ({
+    .filter(
+      (post: { authorId: string | number }) =>
+        userMap[post.authorId] !== undefined,
+    ) // Filter out posts with undefined authors
+    .map((post: { authorId: string | number }) => ({
       ...post,
       author: userMap[post.authorId],
     }));
@@ -180,7 +186,7 @@ export async function getOwnPosts(accessToken: string): Promise<Post[]> {
 
 export async function readPost(
   accessToken: string,
-  postId: string
+  postId: string,
 ): Promise<Post> {
   const url = `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/post/readPost?postId=${postId}`;
 
@@ -198,7 +204,7 @@ export async function readPost(
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(
-      `HTTP error! status: ${response.status}, details: ${errorText}`
+      `HTTP error! status: ${response.status}, details: ${errorText}`,
     );
   }
 
@@ -237,7 +243,7 @@ export async function readPost(
 
 export async function getPostComments(
   accessToken: string,
-  post: Post
+  post: Post,
 ): Promise<PostComment[]> {
   const url = `${process.env.EXPO_PUBLIC__BACKEND_HOST}/api/post/getComments?postId=${post.id}`;
   console.log("calling " + url);
@@ -253,14 +259,18 @@ export async function getPostComments(
   if (!response.ok) {
     const errorText = await response.text();
     throw new Error(
-      `HTTP error! status: ${response.status}, details: ${errorText}`
+      `HTTP error! status: ${response.status}, details: ${errorText}`,
     );
   }
 
   const data = await response.json();
 
   const commenterIds: string[] = Array.from(
-    new Set(data.postComments.map((comment) => comment.commenterUid))
+    new Set(
+      data.postComments.map(
+        (comment: { commenterUid: any }) => comment.commenterUid,
+      ),
+    ),
   ); // get deduped authorId
 
   const userMap: Record<string, User> = await getBatchUser({
@@ -320,7 +330,7 @@ export const addComment = async (request: AddCommentRequest) => {
     // If the response status is not OK, throw an error
     const errorText = await response.text();
     throw new Error(
-      `HTTP error! status: ${response.status}, details: ${errorText}`
+      `HTTP error! status: ${response.status}, details: ${errorText}`,
     );
   }
 

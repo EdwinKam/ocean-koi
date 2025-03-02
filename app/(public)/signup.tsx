@@ -38,7 +38,7 @@ const SignUp = () => {
 
       await auth().createUserWithEmailAndPassword(
         emailRef.current,
-        passwordRef.current
+        passwordRef.current,
       );
     } catch (error: any) {
       console.error(error);
